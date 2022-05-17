@@ -20,5 +20,9 @@ namespace Heap_Tree
         {
 
         }
+        public void Pop()
+        {
+
+        }
     }
 }
