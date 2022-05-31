@@ -7,13 +7,32 @@ namespace Heap_Tree
     class Heap<T> where T : IComparable<T>
     {
         private T[] items;
+        public int Count { get; private set; }
+        public int Capacity { get { return items.Length; } }
+
+        public Heap(int capacity)
+        {
+            items = new T[capacity];
+        }
 
         public void Insert(T item)
         {
-            T[] newItems = new T[items.Length + 1];
-            newItems = items;
-            newItems[items.Length] = item;
+            //resize if the array is full
+            if (Count >= items.Length)
+            {
+                T[] newItems = new T[items.Length * 2];
+
+                for (int i = 0; i < Count; i++)
+                {
+                    newItems[i] = items[i];
+                }
+                items = newItems;
+            }
+
+            items[Count] = item;
+            Count++;
         }
+
         public void HeapifyUp(int index)
         {
             if (index == 0) return;
@@ -32,43 +51,73 @@ namespace Heap_Tree
         {
             int leftChild = index * 2 + 1;
 
-            if (leftChild >= items.Length)
-            {
-                return;
-            }
-
-            int swapIndex = 0;
             int rightChild = index * 2 + 2;
 
-            if (rightChild >= items.Length)
+            //index has no children
+            if (rightChild >= Count && leftChild >= Count) return;
+            //index has a left child and no right child
+            else if (rightChild >= Count)
             {
-                swapIndex = leftChild;
-            }
-            else
-            {
-                if (items[leftChild] != null && items[rightChild] != null)
+                if (items[index].CompareTo(items[leftChild]) < 0)
                 {
-                    swapIndex = Math.Min(items[leftChild], items[rightChild]);
+                    T temp = items[index];
+                    items[index] = items[leftChild];
+                    items[leftChild] = temp;
+                    HeapifyDown(leftChild);
                 }
-                
+                else
+                {
+                    return;
+                }
             }
-            if (items[swapIndex].CompareTo(items[index]) < 0)
+
+            if (items[index].CompareTo(items[leftChild]) < 0 && items[index].CompareTo(items[rightChild]) < 0)
+            {
+                if (items[leftChild].CompareTo(items[rightChild]) < 0)
+                {
+                    T temp = items[index];
+                    items[index] = items[rightChild];
+                    items[rightChild] = temp;
+                    HeapifyDown(rightChild);
+                }
+                else
+                {
+                    T temp = items[index];
+                    items[index] = items[leftChild];
+                    items[leftChild] = temp;
+                    HeapifyDown(leftChild);
+                }
+            }
+            else if (items[index].CompareTo(items[leftChild]) < 0)
             {
                 T temp = items[index];
-                items[index] = items[swapIndex];
-                items[swapIndex] = temp;
+                items[index] = items[leftChild];
+                items[leftChild] = temp;
+                HeapifyDown(leftChild);
             }
-            HeapifyDown(swapIndex);
+            else if (items[index].CompareTo(items[rightChild]) < 0)
+            {
+                T temp = items[index];
+                items[index] = items[rightChild];
+                items[rightChild] = temp;
+                HeapifyDown(rightChild);
+            }
+
         }
+
         public T Pop()
         {
-            if (items.Length == 0) throw new Exception("empty");
+
+            if (Count == 0) throw new Exception("empty");
 
             T root = items[0];
 
-            items[0] = items[items.Length - 1];
+            items[0] = items[Count - 1];
+
+            Count--;
 
             HeapifyDown(0);
+
             return root;
         }
     }
