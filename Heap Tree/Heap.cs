@@ -76,16 +76,18 @@ namespace Heap_Tree
                 if (items[leftChild].CompareTo(items[rightChild]) < 0)
                 {
                     T temp = items[index];
-                    items[index] = items[rightChild];
-                    items[rightChild] = temp;
-                    HeapifyDown(rightChild);
+                    items[index] = items[leftChild];
+                    items[leftChild] = temp;
+                    HeapifyDown(leftChild);
+                    // made this left from right
                 }
                 else
                 {
                     T temp = items[index];
-                    items[index] = items[leftChild];
-                    items[leftChild] = temp;
-                    HeapifyDown(leftChild);
+                    items[index] = items[rightChild];
+                    items[rightChild] = temp;
+                    HeapifyDown(rightChild);
+                    // made this right from left, worked with first 5 nums not anymore
                 }
             }
             else if (items[index].CompareTo(items[leftChild]) < 0)

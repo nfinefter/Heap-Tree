@@ -14,6 +14,9 @@ namespace Heap_Tree
             items.Insert(3);
             items.Insert(4);
             items.Insert(1);
+            items.Insert(7);
+            items.Insert(9);
+
             //Not Displaying in correct Order
             while (items.Count > 0)
             {
