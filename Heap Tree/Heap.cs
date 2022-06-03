@@ -15,8 +15,9 @@ namespace Heap_Tree
             items = new T[capacity];
         }
 
-        public void Insert(T item)
+        public void Push(T item)
         {
+            
             //resize if the array is full
             if (Count >= items.Length)
             {
@@ -30,7 +31,10 @@ namespace Heap_Tree
             }
 
             items[Count] = item;
-            Count++;
+
+            HeapifyUp(Count);
+
+            Count++; 
         }
 
         public void HeapifyUp(int index)
@@ -39,7 +43,7 @@ namespace Heap_Tree
 
             int parent = (index - 1) / 2;
 
-            if (items[index].CompareTo(items[parent]) < 0)
+            if (items[index].CompareTo(items[parent]) > 0)
             {
                 T temp = items[parent];
                 items[parent] = items[index];
@@ -76,18 +80,16 @@ namespace Heap_Tree
                 if (items[leftChild].CompareTo(items[rightChild]) < 0)
                 {
                     T temp = items[index];
-                    items[index] = items[leftChild];
-                    items[leftChild] = temp;
-                    HeapifyDown(leftChild);
-                    // made this left from right
+                    items[index] = items[rightChild];
+                    items[rightChild] = temp;
+                    HeapifyDown(rightChild);
                 }
                 else
                 {
                     T temp = items[index];
-                    items[index] = items[rightChild];
-                    items[rightChild] = temp;
-                    HeapifyDown(rightChild);
-                    // made this right from left, worked with first 5 nums not anymore
+                    items[index] = items[leftChild];
+                    items[leftChild] = temp;
+                    HeapifyDown(leftChild);
                 }
             }
             else if (items[index].CompareTo(items[leftChild]) < 0)
@@ -109,12 +111,11 @@ namespace Heap_Tree
 
         public T Pop()
         {
-
             if (Count == 0) throw new Exception("empty");
 
             T root = items[0];
-
-            items[0] = items[Count - 1];
+                
+            items[0] = items[Count - 1];         
 
             Count--;
 
